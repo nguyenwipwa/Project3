@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context="com.project.com.project3.MainActivity">
+
+    <ImageView
+        android:layout_marginTop="15dp"
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        app:srcCompat="@drawable/icon" />
+
+    <Button
+        android:id="@+id/btncau1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_my"
+        android:onClick="onClick"
+        android:text="Câu 1: Google Maps"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="17dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btncau2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_my"
+        android:onClick="onClick"
+        android:text="Câu 2: Server SMS"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="17dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btncau3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_my"
+        android:onClick="onClick"
+        android:text="Câu 3: Senor"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="17dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btncau4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_my"
+        android:onClick="onClick"
+        android:text="Câu 4: Contacts List"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="17dp"
+        android:textStyle="bold" />
+</LinearLayout>
