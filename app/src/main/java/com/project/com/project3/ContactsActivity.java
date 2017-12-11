@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.com.project3.model.Contact;
@@ -34,18 +36,17 @@ import java.util.List;
 
 import static com.project.com.project3.model.FileUtils.getPath;
 
-public class ContactsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class ContactsActivity extends AppCompatActivity implements View.OnClickListener {
     ArrayAdapter<String> adapter;
     ListView listView;
     String vfile;
+    TextView urlText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         anhXa();
-//        GetContactsIntoArrayList();
-//        getAll();
         getList();
 
     }
@@ -59,10 +60,9 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
 
         try {
             startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
+                    Intent.createChooser(intent, "Select a File to Import"),
                     FILE_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
             Toast.makeText(this, "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -74,14 +74,15 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
         startActivity(intent);
     }
 
-    private void getVcardString() throws IOException {
+    private String getVcardString() throws IOException {
         // TODO Auto-generated method stub
         vCard = new ArrayList<String>();  // Its global....
-
+        vfile = "Contacts" + "_" + System.currentTimeMillis() + ".vcf";
+        String storage_path = "";
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             int i;
-            String storage_path = Environment.getExternalStorageDirectory().toString() + File.separator + vfile;
+            storage_path = Environment.getExternalStorageDirectory().toString() + File.separator + vfile;
             FileOutputStream mFileOutputStream = new FileOutputStream(storage_path, false);
             cursor.moveToFirst();
             for (i = 0; i < cursor.getCount(); i++) {
@@ -92,12 +93,10 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
             }
             mFileOutputStream.close();
             cursor.close();
-            progressDialog.dismiss();
-            thread.interrupt();
         } else {
             Log.d("TAG", "No Contacts in Your Phone");
         }
-        Toast.makeText(this, "Xong", Toast.LENGTH_SHORT).show();
+        return storage_path;
     }
 
     ArrayList<String> vCard;
@@ -132,13 +131,7 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
 
     public void anhXa() {
         listView = (ListView) findViewById(R.id.listContact);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//        CheckedTextView checkedTextView = (CheckedTextView) view;
-//        checkedTextView.setChecked(!checkedTextView.isChecked());
-        Toast.makeText(this, "" + i + " ," + l, Toast.LENGTH_SHORT).show();
+        urlText = (TextView) findViewById(R.id.urlFile);
     }
 
     @Override
@@ -158,46 +151,65 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
                     }
                     Log.d("TAG", "File Path: " + path);
                     importContacts(path);
-                    // Get the file instance
-                    // File file = new File(path);
-                    // Initiate the upload
                 }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                getVcardString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-    ProgressDialog progressDialog;
-    Thread thread = new Thread(runnable);
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnExport:
-                progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle("LOADING...");
-                progressDialog.show();
-                vfile = "Contacts" + "_" + System.currentTimeMillis() + ".vcf";
-
-                thread.start();
-                Toast.makeText(this, "Ngon cơm", Toast.LENGTH_SHORT).show();
+                AsyncTaskRunner runner = new AsyncTaskRunner();
+                runner.execute("EXPORT");
                 break;
             case R.id.btnImport:
                 showFileChooser();
                 break;
             default:
                 break;
+        }
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<String, String, String> {
+
+        private String resp;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Waiting..."); // Calls onProgressUpdate()
+            try {
+                resp = getVcardString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                resp = e.getMessage();
+            }
+            return resp;
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            // execution of result of Long time consuming operation
+            progressDialog.dismiss();
+            urlText.setText(result);
+            Toast.makeText(ContactsActivity.this, "Xong", Toast.LENGTH_SHORT).show();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(ContactsActivity.this,
+                    "SAVING",
+                    "Waiting");
+        }
+
+
+        @Override
+        protected void onProgressUpdate(String... text) {
+            urlText.setText(text[0]);
         }
     }
 }
