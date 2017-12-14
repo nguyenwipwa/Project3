@@ -1,8 +1,6 @@
 package com.project.com.project3;
 
-import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -15,16 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.project.com.project3.model.Contact;
-import com.project.com.project3.model.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,12 +24,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.project.com.project3.model.FileUtils.getPath;
 
 public class ContactsActivity extends AppCompatActivity implements View.OnClickListener {
-    ArrayAdapter<String> adapter;
     ListView listView;
     String vfile;
     TextView urlText;
@@ -70,7 +60,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     private void importContacts(String file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(file)), "text/x-vcard"); //storage path is path of your vcf file and vFile is name of that file.
+        intent.setDataAndType(Uri.fromFile(new File(file)), "text/x-vcard");
         startActivity(intent);
     }
 

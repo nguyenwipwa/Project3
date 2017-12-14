@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
-    private PolylineOptions polylineOptions;
     private int count = 0;
     private Spinner spin, spin2;
     private String arr2[] = {"Polyline", "Polygon", "Circle"};
@@ -133,6 +132,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
             }
         });
     }
+    private PolylineOptions polylineOptions;
 
     private void functionPolyline(LatLng latLng) {
         MarkerOptions option = new MarkerOptions();
