@@ -55,7 +55,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        intent.setType("text/x-vcard");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {

@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btncau1:
                 startIntent(new Intent(this, MapsActivity.class));
                 break;
+            case R.id.btncau3:
+                startIntent(new Intent(this, Cau3Activity.class));
+                break;
             case R.id.btncau4:
                 startIntent(new Intent(this, ContactsActivity.class));
                 break;
