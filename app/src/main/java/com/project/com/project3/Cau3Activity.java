@@ -22,8 +22,8 @@ public class Cau3Activity extends AppCompatActivity implements SensorEventListen
     SensorManager sm;
     Sensor acceleromer, orientation;
     int count = 0;
-    ConstraintLayout layoutcompass;
-    TextView tx, toado;
+    ConstraintLayout layoutcompass, accent;
+    TextView tx, toado, txtlucluc;
     ImageView laban;
     static int idmenu = 1;
     Vibrator v;
@@ -35,15 +35,18 @@ public class Cau3Activity extends AppCompatActivity implements SensorEventListen
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         acceleromer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         orientation = sm.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+        anhXa();
+        layoutcompass = (ConstraintLayout) findViewById(R.id.layoutcompass);
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+    }
+    private void anhXa(){
+        txtlucluc = (TextView) findViewById(R.id.txtlucluc);
         tx = (TextView) findViewById(R.id.count);
         laban = (ImageView) findViewById(R.id.laban_ima);
         toado = (TextView) findViewById(R.id.toado);
-        layoutcompass = (ConstraintLayout) findViewById(R.id.layoutcompass);
-        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-
+        accent = (ConstraintLayout) findViewById(R.id.accent);
     }
-
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -68,7 +71,8 @@ public class Cau3Activity extends AppCompatActivity implements SensorEventListen
         float y = sensorEvent.values[1];
         float z = sensorEvent.values[2];
         float luclac = (x * x + y * y + z * z) / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
-        if (luclac > 2.0 && count <= 100) {
+        txtlucluc.setText(luclac+"");
+        if (luclac > 2.0 && count < 100) {
             count++;
         } else {
             if (count > 0)
@@ -113,14 +117,14 @@ public class Cau3Activity extends AppCompatActivity implements SensorEventListen
             case R.id.Accelerometer:
                 idmenu = 1;
                 layoutcompass.setVisibility(View.GONE);
-                tx.setVisibility(View.VISIBLE);
-
+//                tx.setVisibility(View.VISIBLE);
+                accent.setVisibility(View.VISIBLE);
                 onResume();
                 break;
             case R.id.Orientation:
                 idmenu = 2;
                 layoutcompass.setVisibility(View.VISIBLE);
-                tx.setVisibility(View.GONE);
+                accent.setVisibility(View.GONE);
                 onResume();
                 break;
         }
